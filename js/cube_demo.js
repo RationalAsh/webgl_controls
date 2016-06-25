@@ -1,4 +1,4 @@
-var scene, camera, renderer, model;
+var scene, camera, renderer, model, boundingBox;
 
 init();
 animate();
@@ -49,23 +49,56 @@ function init(){
     var print_plane = new THREE.Mesh( geometry, material );
     scene.add( print_plane );
 
-     var loader = new THREE.STLLoader();
-     loader.load('stls/porsche.stl', function(geometry) {
-	 var material = new THREE.MeshNormalMaterial({color: 0x55B663});
-     	 model = new THREE.Mesh(geometry, material);
-     	 scene.add(model);
-     });
+    var loader = new THREE.STLLoader();
+    loader.load('stls/porsche.stl', function(geometry) {
+     	var material = new THREE.MeshNormalMaterial({color: 0x55B663});
+     	model = new THREE.Mesh(geometry, material);
+	geometry.computeBoundingBox();
+	boundingBox = geometry.boundingBox.clone();
+	camera.position.set(0, -250, 100); 
+     	scene.add(model);
+    });
 
     controls = new THREE.OrbitControls(camera, renderer.domElement);
 
-    scale_button = document.getElementById("scale-btn");
+    //console.log(boundingBox.min, boundingBox.max, boundingBox.size);
+
+    //Handle the scaling
+    scale_button = document.getElementById('scale-btn');
     scale_button.onclick = function(event){
-	scale_factor = parseFloat(document.getElementById("scale-factor").value);
+	var scale_factor = parseFloat(document.getElementById('scale-factor').value);
 	model.scale.x *= scale_factor;
 	model.scale.y *= scale_factor;
 	model.scale.z *= scale_factor;
 	render();
-    }}
+    }
+
+    //Handle the rotation
+    rot_button = document.getElementById('rot-btn');
+    rot_button.onclick = function(event){
+	var DEG2RAD = 3.14159/180.0;
+	var rotX = parseFloat(document.getElementById('x-rot').value);
+	var rotY = parseFloat(document.getElementById('y-rot').value);
+	var rotZ = parseFloat(document.getElementById('z-rot').value);
+
+	model.rotateX(rotX*DEG2RAD);
+	model.rotateY(rotY*DEG2RAD);
+	model.rotateZ(rotZ*DEG2RAD);
+    }
+
+    //Handle the translation
+    trans_button = document.getElementById('trans-btn');
+    trans_button.onclick = function(event){
+	var dx = parseFloat(document.getElementById('x-pos').value);
+	var dy = parseFloat(document.getElementById('y-pos').value);
+	var dz = parseFloat(document.getElementById('z-pos').value);
+	
+	model.translateX(dx);
+	model.translateY(dy);
+	model.translateZ(dz);
+    }
+	
+}
 
 
 function animate(){
