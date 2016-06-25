@@ -1,4 +1,4 @@
-var scene, camera, renderer;
+var scene, camera, renderer, model;
 
 init();
 animate();
@@ -52,12 +52,21 @@ function init(){
      var loader = new THREE.STLLoader();
      loader.load('stls/porsche.stl', function(geometry) {
 	 var material = new THREE.MeshNormalMaterial({color: 0x55B663});
-     	mesh = new THREE.Mesh(geometry, material);
-     	scene.add(mesh);
+     	 model = new THREE.Mesh(geometry, material);
+     	 scene.add(model);
      });
 
     controls = new THREE.OrbitControls(camera, renderer.domElement);
-}
+
+    scale_button = document.getElementById("scale-btn");
+    scale_button.onclick = function(event){
+	scale_factor = parseFloat(document.getElementById("scale-factor").value);
+	model.scale.x *= scale_factor;
+	model.scale.y *= scale_factor;
+	model.scale.z *= scale_factor;
+	render();
+    }}
+
 
 function animate(){
     requestAnimationFrame(animate);
@@ -65,4 +74,8 @@ function animate(){
     //Render the scene
     renderer.render(scene, camera);
     controls.update();
+}
+
+function render(){
+    renderer.render( scene, camera );
 }
