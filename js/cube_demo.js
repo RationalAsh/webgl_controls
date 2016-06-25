@@ -49,12 +49,12 @@ function init(){
     var print_plane = new THREE.Mesh( geometry, material );
     scene.add( print_plane );
 
-    // var loader = new THREE.STLLoader();
-    // loader.load('stls/porsche.stl', function(geometry) {
-    // 	var material = new THREE.MeshNormalMaterial({color: 0x55B663});
-    // 	mesh = new THREE.Mesh(geometry, material);
-    // 	scene.add(mesh);
-    // });
+     var loader = new THREE.STLLoader();
+     loader.load('stls/porsche.stl', function(geometry) {
+	 var material = new THREE.MeshNormalMaterial({color: 0x55B663});
+     	mesh = new THREE.Mesh(geometry, material);
+     	scene.add(mesh);
+     });
 
     controls = new THREE.OrbitControls(camera, renderer.domElement);
 }
