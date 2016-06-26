@@ -1,5 +1,5 @@
 //Declare these as global so I can access them anywhere
-var scene, camera, renderer, model, boundingBox;
+var scene, camera, renderer, model, model_geom, boundingBox;
 
 init();
 animate();
@@ -18,8 +18,8 @@ function init(){
     //var HEIGHT = parseInt(cont_style.getPropertyValue('height'));
 
     //Create renderer and add to DOM
-    renderer = new THREE.WebGLRenderer({antialias: true});
     //renderer = new THREE.CanvasRenderer();
+    renderer =  new THREE.WebGLRenderer();
     renderer.setSize(WIDTH, HEIGHT);
     //display_element = document.getElementById("display");
     //document.body.appendChild(renderer.domElement);
@@ -54,6 +54,10 @@ function init(){
     //Use the STLLoader to load stl files
     var loader = new THREE.STLLoader();
     loader.load('stls/porsche.stl', function(geometry) {
+
+	//Computing volume of geometry
+	
+
      	var material = new THREE.MeshNormalMaterial({color: 0x55B663});
      	model = new THREE.Mesh(geometry, material);
 	geometry.computeBoundingBox();
