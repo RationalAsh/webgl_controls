@@ -67,9 +67,10 @@ function init(){
     scale_button = document.getElementById('scale-btn');
     scale_button.onclick = function(event){
 	var scale_factor = parseFloat(document.getElementById('scale-factor').value);
-	model.scale.x *= scale_factor;
-	model.scale.y *= scale_factor;
-	model.scale.z *= scale_factor;
+	model.geometry.applyMatrix(new THREE.Matrix4().makeScale(scale_factor, scale_factor, scale_factor));
+	//model.scale.x *= scale_factor;
+	//model.scale.y *= scale_factor;
+	//model.scale.z *= scale_factor;
 	render();
     }
 
@@ -81,9 +82,13 @@ function init(){
 	var rotY = parseFloat(document.getElementById('y-rot').value);
 	var rotZ = parseFloat(document.getElementById('z-rot').value);
 
-	model.rotateX(rotX*DEG2RAD);
-	model.rotateY(rotY*DEG2RAD);
-	model.rotateZ(rotZ*DEG2RAD);
+	model.geometry.applyMatrix(new THREE.Matrix4().makeRotationX(rotX*DEG2RAD));
+	model.geometry.applyMatrix(new THREE.Matrix4().makeRotationY(rotY*DEG2RAD));
+	model.geometry.applyMatrix(new THREE.Matrix4().makeRotationZ(rotZ*DEG2RAD));
+
+	//model.rotateX(rotX*DEG2RAD);
+	//model.rotateY(rotY*DEG2RAD);
+	//model.rotateZ(rotZ*DEG2RAD);
     }
 
     //Handle the translation
@@ -93,9 +98,13 @@ function init(){
 	var dy = parseFloat(document.getElementById('y-pos').value);
 	var dz = parseFloat(document.getElementById('z-pos').value);
 	
-	model.translateX(dx);
-	model.translateY(dy);
-	model.translateZ(dz);
+	//Apply translation
+	model.geometry.applyMatrix(new THREE.Matrix4().makeTranslation(dx,dy,dz));
+    }
+    
+    center_button = document.getElementById('center-btn');
+    center_button.onclick = function(event){
+	model.geometry.center();
     }
 	
 }
