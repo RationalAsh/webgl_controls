@@ -51,13 +51,12 @@ function init(){
     scene.add( print_plane );
 
 
-    //Use the STLLoader to load stl files
+    //Use the STLLoader to load stl files    
     var loader = new THREE.STLLoader();
     loader.load('stls/porsche.stl', function(geometry) {
-
+	//Copy geometry to global variable
+	model_geom = geometry.clone();
 	//Computing volume of geometry
-	
-
      	var material = new THREE.MeshNormalMaterial({color: 0x55B663});
      	model = new THREE.Mesh(geometry, material);
 	geometry.computeBoundingBox();
