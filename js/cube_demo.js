@@ -1,3 +1,4 @@
+//Declare these as global so I can access them anywhere
 var scene, camera, renderer, model, boundingBox;
 
 init();
@@ -49,6 +50,8 @@ function init(){
     var print_plane = new THREE.Mesh( geometry, material );
     scene.add( print_plane );
 
+
+    //Use the STLLoader to load stl files
     var loader = new THREE.STLLoader();
     loader.load('stls/porsche.stl', function(geometry) {
      	var material = new THREE.MeshNormalMaterial({color: 0x55B663});
@@ -59,22 +62,20 @@ function init(){
      	scene.add(model);
     });
 
+    //This adds the rotate and pan view controls
     controls = new THREE.OrbitControls(camera, renderer.domElement);
 
     //console.log(boundingBox.min, boundingBox.max, boundingBox.size);
 
-    //Handle the scaling
+    //Scale the model when scale button is clicked
     scale_button = document.getElementById('scale-btn');
     scale_button.onclick = function(event){
 	var scale_factor = parseFloat(document.getElementById('scale-factor').value);
 	model.geometry.applyMatrix(new THREE.Matrix4().makeScale(scale_factor, scale_factor, scale_factor));
-	//model.scale.x *= scale_factor;
-	//model.scale.y *= scale_factor;
-	//model.scale.z *= scale_factor;
 	render();
     }
 
-    //Handle the rotation
+    //Rotate the model when the rotate button is clicked
     rot_button = document.getElementById('rot-btn');
     rot_button.onclick = function(event){
 	var DEG2RAD = 3.14159/180.0;
@@ -85,13 +86,9 @@ function init(){
 	model.geometry.applyMatrix(new THREE.Matrix4().makeRotationX(rotX*DEG2RAD));
 	model.geometry.applyMatrix(new THREE.Matrix4().makeRotationY(rotY*DEG2RAD));
 	model.geometry.applyMatrix(new THREE.Matrix4().makeRotationZ(rotZ*DEG2RAD));
-
-	//model.rotateX(rotX*DEG2RAD);
-	//model.rotateY(rotY*DEG2RAD);
-	//model.rotateZ(rotZ*DEG2RAD);
     }
 
-    //Handle the translation
+    //Translate the model when the translate button is clicked
     trans_button = document.getElementById('trans-btn');
     trans_button.onclick = function(event){
 	var dx = parseFloat(document.getElementById('x-pos').value);
@@ -102,6 +99,7 @@ function init(){
 	model.geometry.applyMatrix(new THREE.Matrix4().makeTranslation(dx,dy,dz));
     }
     
+    //Center the model to origin when the center button is clicked.
     center_button = document.getElementById('center-btn');
     center_button.onclick = function(event){
 	model.geometry.center();
